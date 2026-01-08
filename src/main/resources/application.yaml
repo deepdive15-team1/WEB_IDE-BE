@@ -1,0 +1,37 @@
+app:
+  jwt:
+    secret: "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+    access-minutes: 15
+  refresh:
+    days: 14
+    pepper: "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+
+server:
+  port: 8080
+
+spring:
+  application:
+    name: code-review-ide
+  datasource:
+    url: jdbc:mysql://localhost:3306/code_review_ide?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+    open-in-view: false
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+
+
