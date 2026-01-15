@@ -43,7 +43,7 @@ public class PostService {
         // 작성자 참여자 등록
         //chatParticipantRepository.save(new ChatParticipant(room, author, ChatRole.AUTHOR));
 
-        return new CreatePostResponse(saved.getId(), null);
+        return new CreatePostResponse(saved.getId(), null, post.getStatus(), post.getCreatedAt());
     }
 
     public PostListResponse listOpenPosts(int page, int size) {
