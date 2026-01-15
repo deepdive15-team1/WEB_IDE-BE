@@ -45,8 +45,8 @@ public class PostController {
      */
     @GetMapping
     public ResponseEntity<PostListResponse> listOpen(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "20") int size
     ) {
         return ResponseEntity.ok(postService.listOpenPosts(page, size));
     }
@@ -57,8 +57,8 @@ public class PostController {
     @GetMapping("/me")
     public ResponseEntity<PostListResponse> listMine(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "20") int size
     ) {
         Long userId = requireUserId(authorization);
         return ResponseEntity.ok(postService.listMyPosts(userId, page, size));
@@ -70,7 +70,7 @@ public class PostController {
     @GetMapping("/{postId}")
     public ResponseEntity<PostDetailResponse> get(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
-            @PathVariable Long postId
+            @PathVariable("postId") Long postId
     ) {
         Long userId = requireUserId(authorization);
         return ResponseEntity.ok(postService.getPost(userId, postId));
@@ -93,7 +93,7 @@ public class PostController {
     @PostMapping("/{postId}/complete")
     public ResponseEntity<CompletePostResponse> complete(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
-            @PathVariable Long postId,
+            @PathVariable("postId") Long postId,
             @RequestBody(required = false) CompletePostRequest req
     ) {
         Long userId = requireUserId(authorization);
