@@ -10,6 +10,8 @@ server:
   port: 8080
 
 spring:
+  config:
+    import: "classpath:application-secret.yml"
   application:
     name: code-review-ide
   datasource:
