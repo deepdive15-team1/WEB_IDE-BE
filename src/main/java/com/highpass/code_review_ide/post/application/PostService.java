@@ -1,17 +1,25 @@
-package com.highpass.code_review_ide.service.post;
+package com.highpass.code_review_ide.post.application;
 
-import com.highpass.code_review_ide.api.post.dto.*;
-//import com.highpass.code_review_ide.domain.chat.*;
-import com.highpass.code_review_ide.domain.post.*;
-import com.highpass.code_review_ide.domain.user.User;
-import com.highpass.code_review_ide.domain.user.UserRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.highpass.code_review_ide.post.api.dto.request.CompletePostRequest;
+import com.highpass.code_review_ide.post.api.dto.request.CreatePostRequest;
+import com.highpass.code_review_ide.post.api.dto.response.CompletePostResponse;
+import com.highpass.code_review_ide.post.api.dto.response.CreatePostResponse;
+import com.highpass.code_review_ide.post.api.dto.response.PostDetailResponse;
+import com.highpass.code_review_ide.post.api.dto.response.PostListResponse;
+import com.highpass.code_review_ide.post.domain.PostStatus;
+import com.highpass.code_review_ide.post.domain.ReviewPost;
+import com.highpass.code_review_ide.post.domain.dao.ReviewPostRepository;
+import com.highpass.code_review_ide.user.domain.User;
+import com.highpass.code_review_ide.user.domain.dao.UserRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor

@@ -1,4 +1,4 @@
-package com.highpass.code_review_ide.api.post.dto;
+package com.highpass.code_review_ide.post.api.dto.request;
 
 /**
  * 완료 직전에 마지막 코드 스냅샷을 함께 보낼 수 있다(선택).

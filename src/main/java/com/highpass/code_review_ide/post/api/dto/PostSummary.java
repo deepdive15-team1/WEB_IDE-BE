@@ -1,4 +1,4 @@
-package com.highpass.code_review_ide.api.post.dto;
+package com.highpass.code_review_ide.post.api.dto;
 
 import java.time.LocalDateTime;
 

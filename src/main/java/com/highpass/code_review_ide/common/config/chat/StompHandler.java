@@ -1,15 +1,9 @@
 package com.highpass.code_review_ide.common.config.chat;
 
-import com.highpass.code_review_ide.chat.application.ChatQueryService;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
 import java.nio.charset.StandardCharsets;
+
 import javax.crypto.SecretKey;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
@@ -19,6 +13,14 @@ import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+
+import com.highpass.code_review_ide.chat.application.ChatQueryService;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Slf4j

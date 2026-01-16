@@ -1,9 +1,11 @@
-package com.highpass.code_review_ide.api.post.dto;
-
-import com.highpass.code_review_ide.domain.post.ReviewPost;
-import org.springframework.data.domain.Page;
+package com.highpass.code_review_ide.post.api.dto.response;
 
 import java.util.List;
+
+import org.springframework.data.domain.Page;
+
+import com.highpass.code_review_ide.post.api.dto.PostSummary;
+import com.highpass.code_review_ide.post.domain.ReviewPost;
 
 public record PostListResponse(
         List<PostSummary> items,

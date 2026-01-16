@@ -1,8 +1,8 @@
-package com.highpass.code_review_ide.api.post.dto;
-
-import com.highpass.code_review_ide.domain.post.ReviewPost;
+package com.highpass.code_review_ide.post.api.dto.response;
 
 import java.time.LocalDateTime;
+
+import com.highpass.code_review_ide.post.domain.ReviewPost;
 
 public record PostDetailResponse(
         Long id,

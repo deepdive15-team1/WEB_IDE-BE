@@ -1,11 +1,14 @@
-package com.highpass.code_review_ide.domain.post;
+package com.highpass.code_review_ide.post.domain.dao;
+
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Optional;
+import com.highpass.code_review_ide.post.domain.PostStatus;
+import com.highpass.code_review_ide.post.domain.ReviewPost;
 
 public interface ReviewPostRepository extends JpaRepository<ReviewPost, Long> {
 

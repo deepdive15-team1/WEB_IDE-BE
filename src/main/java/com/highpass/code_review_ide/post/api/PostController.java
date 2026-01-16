@@ -1,15 +1,29 @@
-package com.highpass.code_review_ide.api.post;
-
-import com.highpass.code_review_ide.api.post.dto.*;
-import com.highpass.code_review_ide.security.JwtProvider;
-import com.highpass.code_review_ide.service.post.PostService;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+package com.highpass.code_review_ide.post.api;
 
 import java.net.URI;
+
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.highpass.code_review_ide.common.security.JwtProvider;
+import com.highpass.code_review_ide.post.api.dto.request.CompletePostRequest;
+import com.highpass.code_review_ide.post.api.dto.request.CreatePostRequest;
+import com.highpass.code_review_ide.post.api.dto.response.CompletePostResponse;
+import com.highpass.code_review_ide.post.api.dto.response.CreatePostResponse;
+import com.highpass.code_review_ide.post.api.dto.response.PostDetailResponse;
+import com.highpass.code_review_ide.post.api.dto.response.PostListResponse;
+import com.highpass.code_review_ide.post.application.PostService;
+
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor

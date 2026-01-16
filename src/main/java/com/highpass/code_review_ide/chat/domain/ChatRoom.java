@@ -1,6 +1,10 @@
 package com.highpass.code_review_ide.chat.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.highpass.code_review_ide.common.domain.BaseTimeEntity;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,8 +12,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,8 +33,10 @@ public class ChatRoom extends BaseTimeEntity {
     private String name;
 
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.REMOVE)
+    @Builder.Default
     private List<ChatParticipant> chatParticipants = new ArrayList<>();
 
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @Builder.Default
     private List<ChatMessage> chatMessages = new ArrayList<>();
 }
