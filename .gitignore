@@ -36,4 +36,11 @@ out/
 ### VS Code ###
 .vscode/
 
-application-secret.yml
+## .env 추가 ###
+.env
+
+## .gitignore 추가 ###
+.gitignore
+
+## application-secrets.yml 추가 ###
+application-secrets.yml
