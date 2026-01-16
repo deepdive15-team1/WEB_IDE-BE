@@ -1,4 +1,4 @@
-package com.highpass.code_review_ide.security;
+package com.highpass.code_review_ide.common.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;

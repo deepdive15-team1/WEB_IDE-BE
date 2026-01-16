@@ -1,4 +1,4 @@
-package com.highpass.code_review_ide.config.chat;
+package com.highpass.code_review_ide.common.config.chat;
 
 import com.highpass.code_review_ide.service.chat.ChatQueryService;
 import io.jsonwebtoken.Claims;

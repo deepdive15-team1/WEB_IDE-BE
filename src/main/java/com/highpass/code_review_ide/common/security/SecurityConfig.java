@@ -1,4 +1,4 @@
-package com.highpass.code_review_ide.security;
+package com.highpass.code_review_ide.common.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

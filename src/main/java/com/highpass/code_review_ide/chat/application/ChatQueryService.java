@@ -1,11 +1,11 @@
 package com.highpass.code_review_ide.chat.application;
 
 import com.highpass.code_review_ide.chat.domain.ChatRoom;
-import com.highpass.code_review_ide.chat.domain.ChatMessageRepository;
-import com.highpass.code_review_ide.chat.domain.ChatParticipantRepository;
-import com.highpass.code_review_ide.chat.domain.ChatRoomRepository;
+import com.highpass.code_review_ide.chat.domain.dao.ChatMessageRepository;
+import com.highpass.code_review_ide.chat.domain.dao.ChatParticipantRepository;
+import com.highpass.code_review_ide.chat.domain.dao.ChatRoomRepository;
 import com.highpass.code_review_ide.user.domain.User;
-import com.highpass.code_review_ide.user.domain.UserRepository;
+import com.highpass.code_review_ide.user.domain.dao.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

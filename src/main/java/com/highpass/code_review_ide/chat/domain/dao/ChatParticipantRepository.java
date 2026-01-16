@@ -1,5 +1,7 @@
-package com.highpass.code_review_ide.chat.domain;
+package com.highpass.code_review_ide.chat.domain.dao;
 
+import com.highpass.code_review_ide.chat.domain.ChatParticipant;
+import com.highpass.code_review_ide.chat.domain.ChatRoom;
 import com.highpass.code_review_ide.user.domain.User;
 import java.util.List;
 import java.util.Optional;

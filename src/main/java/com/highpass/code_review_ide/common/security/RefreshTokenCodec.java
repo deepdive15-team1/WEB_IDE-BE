@@ -1,4 +1,4 @@
-package com.highpass.code_review_ide.security;
+package com.highpass.code_review_ide.common.security;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
