@@ -1,6 +1,6 @@
 package com.highpass.code_review_ide.common.config.chat;
 
-import com.highpass.code_review_ide.service.chat.ChatQueryService;
+import com.highpass.code_review_ide.chat.application.ChatQueryService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
