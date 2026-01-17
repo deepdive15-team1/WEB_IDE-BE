@@ -29,7 +29,7 @@ public class ChatController {
     }
 
     @GetMapping("/rooms/{roomId}/messages")
-    public ResponseEntity<?> getChatHistory(@PathVariable Long roomId, @AuthenticationPrincipal User user){
+    public ResponseEntity<List<ChatMessageResponse>> getChatHistory(@PathVariable Long roomId, @AuthenticationPrincipal User user){
         List<ChatMessageResponse> chatMessageResponses = chatQueryService.getChatHistory(roomId, user);
         return ResponseEntity.ok().body(chatMessageResponses);
     }
