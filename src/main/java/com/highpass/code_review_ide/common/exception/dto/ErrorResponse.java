@@ -8,10 +8,11 @@ import org.springframework.http.ResponseEntity;
 @Getter
 @Builder
 public class ErrorResponse {
+
     private final int status;
     private final String message;
 
-    public static ResponseEntity<ErrorResponse> toResponseEntity(BaseExceptionType exceptionType) {
+    public static ResponseEntity<ErrorResponse> toResponseEntity(final BaseExceptionType exceptionType) {
         return ResponseEntity
                 .status(exceptionType.getStatus())
                 .body(ErrorResponse.builder()
