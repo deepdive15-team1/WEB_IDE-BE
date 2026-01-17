@@ -11,7 +11,6 @@ import com.highpass.code_review_ide.user.domain.dao.UserRepository;
 import com.highpass.code_review_ide.chat.api.dto.request.ChatMessageRequest;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,11 +24,11 @@ public class ChatCommandService {
     private final ChatMessageRepository chatMessageRepository;
     private final UserRepository userRepository;
 
-    public void saveMessage(final Long roomId, final ChatMessageRequest chatMessageRequest) {
+    public ChatMessage saveMessage(final Long roomId, final ChatMessageRequest chatMessageRequest, final User user) {
         ChatRoom chatRoom = chatRoomRepository.findById(roomId)
                 .orElseThrow(() -> new EntityNotFoundException("Can not find room"));
 
-        User sender = userRepository.findByEmail(chatMessageRequest.senderEmail())
+        User sender = userRepository.findById(user.getId())
                 .orElseThrow(() -> new EntityNotFoundException("Can not find member"));
 
         ChatMessage chatMessage = ChatMessage.builder()
@@ -37,7 +36,7 @@ public class ChatCommandService {
                 .user(sender)
                 .content(chatMessageRequest.message())
                 .build();
-        chatMessageRepository.save(chatMessage);
+        return chatMessageRepository.save(chatMessage);
     }
 
     public void addParticipantToRoomChat(final Long roomId, final User user) {
