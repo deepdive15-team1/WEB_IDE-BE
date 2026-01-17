@@ -6,10 +6,11 @@ import com.highpass.code_review_ide.chat.domain.ChatRoom;
 import com.highpass.code_review_ide.chat.domain.dao.ChatMessageRepository;
 import com.highpass.code_review_ide.chat.domain.dao.ChatParticipantRepository;
 import com.highpass.code_review_ide.chat.domain.dao.ChatRoomRepository;
+import com.highpass.code_review_ide.chat.exception.ChatExceptionType;
+import com.highpass.code_review_ide.chat.exception.ChatException;
 import com.highpass.code_review_ide.user.domain.User;
 import com.highpass.code_review_ide.user.domain.dao.UserRepository;
 import com.highpass.code_review_ide.chat.api.dto.request.ChatMessageRequest;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,10 +27,10 @@ public class ChatCommandService {
 
     public ChatMessage saveMessage(final Long roomId, final ChatMessageRequest chatMessageRequest, final User user) {
         ChatRoom chatRoom = chatRoomRepository.findById(roomId)
-                .orElseThrow(() -> new EntityNotFoundException("Can not find room"));
+                .orElseThrow(() -> new ChatException(ChatExceptionType.CHAT_ROOM_NOT_FOUND));
 
         User sender = userRepository.findById(user.getId())
-                .orElseThrow(() -> new EntityNotFoundException("Can not find member"));
+                .orElseThrow(() -> new ChatException(ChatExceptionType.USER_NOT_FOUND));
 
         ChatMessage chatMessage = ChatMessage.builder()
                 .chatRoom(chatRoom)
@@ -41,7 +42,7 @@ public class ChatCommandService {
 
     public void addParticipantToRoomChat(final Long roomId, final User user) {
         ChatRoom chatRoom = chatRoomRepository.findById(roomId)
-                .orElseThrow(() -> new EntityNotFoundException("Can not find room"));
+                .orElseThrow(() -> new ChatException(ChatExceptionType.CHAT_ROOM_NOT_FOUND));
 
         boolean isParticipated = chatParticipantRepository.existsByChatRoomAndUser(chatRoom, user);
         if (!isParticipated) {
