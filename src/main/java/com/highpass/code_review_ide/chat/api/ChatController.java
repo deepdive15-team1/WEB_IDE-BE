@@ -28,7 +28,7 @@ public class ChatController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/rooms/{roomId}/history")
+    @GetMapping("/rooms/{roomId}/messages")
     public ResponseEntity<?> getChatHistory(@PathVariable Long roomId, @AuthenticationPrincipal User user){
         List<ChatMessageResponse> chatMessageResponses = chatQueryService.getChatHistory(roomId, user);
         return ResponseEntity.ok().body(chatMessageResponses);
