@@ -32,8 +32,7 @@ public class ChatQueryService {
         final User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("Can not find user"));
 
-        return chatParticipantRepository.findByChatRoom(chatRoom).stream()
-                .anyMatch(participant -> participant.getUser().getId().equals(user.getId()));
+        return chatParticipantRepository.existsByChatRoomAndUser(chatRoom, user);
     }
 
     public List<ChatMessageResponse> getChatHistory(final Long roomId, final User user) {
