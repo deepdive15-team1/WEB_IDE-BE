@@ -25,8 +25,12 @@ public class StompController {
                             @AuthenticationPrincipal User user) throws JsonProcessingException {
         final ChatMessage savedMessage = chatCommandService.saveMessage(roomId, chatMessageRequest, user);
 
-        final ChatMessageResponse chatMessageResponse = new ChatMessageResponse(roomId, chatMessageRequest.message(),
-                chatMessageRequest.senderName(), savedMessage.getCreatedTime());
+        final ChatMessageResponse chatMessageResponse = ChatMessageResponse.builder()
+                .roomId(roomId)
+                .message(chatMessageRequest.message())
+                .senderName(chatMessageRequest.senderName())
+                .sendTime(savedMessage.getCreatedTime())
+                .build();
         messagingTemplate.convertAndSend("/subscribe/room/" + roomId, chatMessageResponse);
     }
 }

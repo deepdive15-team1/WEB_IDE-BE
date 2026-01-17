@@ -33,18 +33,17 @@ public class ChatQueryService {
                 .orElseThrow(() -> new EntityNotFoundException("Can not find user"));
 
         return chatParticipantRepository.findByChatRoom(chatRoom).stream()
-                .anyMatch(participant -> participant.getUser().equals(user));
+                .anyMatch(participant -> participant.getUser().getId().equals(user.getId()));
     }
 
     public List<ChatMessageResponse> getChatHistory(final Long roomId, final User user) {
         final ChatRoom chatRoom = chatRoomRepository.findById(roomId)
                 .orElseThrow(() -> new EntityNotFoundException("Can not find room"));
 
-        List<ChatParticipant> chatParticipants = chatParticipantRepository.findByChatRoom(chatRoom);
-        chatParticipants.stream()
-                .filter(participant -> participant.getUser().equals(user))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("본인이 속하지 않은 채팅방입니다."));
+        boolean isParticipant = chatParticipantRepository.existsByChatRoomAndUser(chatRoom, user);
+        if (!isParticipant) {
+            throw new IllegalArgumentException("본인이 속하지 않은 채팅방입니다.");
+        }
 
         List<ChatMessage> chatMessages = chatMessageRepository.findByChatRoomOrderByCreatedTimeAsc(chatRoom);
         return chatMessages.stream()
