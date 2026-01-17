@@ -1,6 +1,7 @@
 package com.highpass.code_review_ide.chat.application;
 
 import com.highpass.code_review_ide.chat.domain.ChatMessage;
+import com.highpass.code_review_ide.chat.domain.ChatParticipant;
 import com.highpass.code_review_ide.chat.domain.ChatRoom;
 import com.highpass.code_review_ide.chat.domain.dao.ChatMessageRepository;
 import com.highpass.code_review_ide.chat.domain.dao.ChatParticipantRepository;
@@ -10,6 +11,7 @@ import com.highpass.code_review_ide.user.domain.dao.UserRepository;
 import com.highpass.code_review_ide.chat.api.dto.request.ChatMessageRequest;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,5 +38,18 @@ public class ChatCommandService {
                 .content(chatMessageRequest.message())
                 .build();
         chatMessageRepository.save(chatMessage);
+    }
+
+    public void addParticipantToRoomChat(final Long roomId, final User user) {
+        ChatRoom chatRoom = chatRoomRepository.findById(roomId)
+                .orElseThrow(() -> new EntityNotFoundException("Can not find room"));
+
+        boolean isParticipated = chatParticipantRepository.existsByChatRoomAndUser(chatRoom, user);
+        if (!isParticipated) {
+            chatParticipantRepository.save(ChatParticipant.builder()
+                    .chatRoom(chatRoom)
+                    .user(user)
+                    .build());
+        }
     }
 }
