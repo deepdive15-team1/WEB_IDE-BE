@@ -7,6 +7,7 @@ import com.highpass.code_review_ide.user.domain.User;
 import com.highpass.code_review_ide.user.domain.dao.UserRepository;
 import io.jsonwebtoken.JwtException;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
@@ -22,6 +23,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.util.StringUtils;
 
 @Slf4j
@@ -31,11 +33,12 @@ import org.springframework.util.StringUtils;
 public class StompHandler implements ChannelInterceptor {
 
     private static final String BEARER_PREFIX = "Bearer ";
-    private static final String ROOM_PATH_PREFIX = "room";
+    private static final String SUBSCRIPTION_PATTERN = "/subscribe/room/{roomId}";
 
     private final JwtProvider jwtProvider;
     private final ChatQueryService chatQueryService;
     private final UserRepository userRepository;
+    private final AntPathMatcher pathMatcher = new AntPathMatcher();
 
     @Override
     public Message<?> preSend(final Message<?> message, final MessageChannel channel) {
@@ -106,15 +109,16 @@ public class StompHandler implements ChannelInterceptor {
             throw new AuthenticationServiceException("목적지가 존재하지 않습니다.");
         }
 
+        if (!pathMatcher.match(SUBSCRIPTION_PATTERN, destination)) {
+            log.warn("잘못된 구독 경로 패턴: {}", destination);
+            throw new AuthenticationServiceException("올바르지 않은 구독 경로입니다. (Pattern: " + SUBSCRIPTION_PATTERN + ")");
+        }
+
         try {
-            final String[] parts = destination.split("/");
-            if (parts.length < 4 || !ROOM_PATH_PREFIX.equals(parts[2])) {
-                log.warn("잘못된 구독 경로 패턴: {}", destination);
-                throw new AuthenticationServiceException("잘못된 목적지 경로입니다.");
-            }
-            return Long.parseLong(parts[3]);
+            final Map<String, String> variables = pathMatcher.extractUriTemplateVariables(SUBSCRIPTION_PATTERN, destination);
+            return Long.parseLong(variables.get("roomId"));
         } catch (final NumberFormatException e) {
-            throw new AuthenticationServiceException("Room ID 형식이 올바르지 않습니다.");
+            throw new AuthenticationServiceException("Room ID는 숫자여야 합니다.");
         }
     }
 }
