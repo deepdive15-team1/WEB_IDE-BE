@@ -39,5 +39,5 @@ out/
 ## .env 추가 ###
 .env
 
-## application-secrets.yml 추가 ###
-application-secrets.yml
+### application-secret.yml 추가 ###
+application-secret.yml
