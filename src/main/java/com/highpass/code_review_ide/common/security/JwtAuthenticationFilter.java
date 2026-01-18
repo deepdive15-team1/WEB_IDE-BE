@@ -26,22 +26,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         String token = resolveToken(request);
-        {
-            Long userId = jwtProvider.getUserId(token);
-            String email = jwtProvider.getEmail(token);
 
-            Authentication authentication = new UsernamePasswordAuthenticationToken(
-                    userId,
-                    null,
-                    Collections.emptyList()
-            );
-
-            // SecurityContext에 저장
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        }
         if (StringUtils.hasText(token)) {
-            try  catch (Exception e) {
+            try {
+                Long userId = jwtProvider.getUserId(token);
+                String email = jwtProvider.getEmail(token);
+
+                Authentication authentication = new UsernamePasswordAuthenticationToken(
+                        userId,
+                        null,
+                        Collections.emptyList()
+                );
+
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            } catch (Exception e) {
                 SecurityContextHolder.clearContext();
             }
         }
