@@ -34,19 +34,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (StringUtils.hasText(token)) {
             try {
                 Long userId = jwtProvider.getUserId(token);
-
+                
+                // DB에서 User 객체 조회
                 User user = userRepository.findById(userId)
                         .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
+                // Principal에 User 객체 저장
                 Authentication authentication = new UsernamePasswordAuthenticationToken(
-                        user,
-                        null,
-                        Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
+                        user, 
+                        null,   
+                        Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"))
                 );
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
             } catch (Exception e) {
+                log.warn("JWT Authentication failed: {}", e.getMessage());
                 SecurityContextHolder.clearContext();
             }
         }
