@@ -2,7 +2,6 @@ package com.highpass.code_review_ide.gist.application;
 
 import com.highpass.code_review_ide.gist.dto.GistRequest;
 import com.highpass.code_review_ide.user.domain.User;
-import com.highpass.code_review_ide.user.domain.dao.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -19,14 +18,10 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class GistService {
 
-    private final UserRepository userRepository;
     private final RestTemplate restTemplate = new RestTemplate();
 
     @Transactional(readOnly = true)
-    public String createGist(Long userId, GistRequest request) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
-
+    public String createGist(User user, GistRequest request) {
         String githubToken = user.getGithubAccessToken();
         if (githubToken == null) {
             throw new IllegalStateException("GitHub 연동이 필요합니다. 다시 로그인해주세요.");
