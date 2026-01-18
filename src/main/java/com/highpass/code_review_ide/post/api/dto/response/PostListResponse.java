@@ -24,7 +24,8 @@ public record PostListResponse(
                         post.getLanguage(),
                         post.getAuthor().getId(),
                         post.getAuthor().getNickname(),
-                        post.getCreatedAt()
+                        post.getCreatedAt(),
+                        post.getUpdatedAt()
                 ))
                 .toList();
 
