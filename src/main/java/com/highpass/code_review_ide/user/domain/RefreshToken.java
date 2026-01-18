@@ -10,7 +10,12 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "refresh_tokens")
+@Table(
+        name = "refresh_tokens",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "token_hash")
+        }
+)
 @EntityListeners(AuditingEntityListener.class)
 public class RefreshToken {
 
