@@ -52,4 +52,8 @@ public class EmailVerification {
     public boolean isVerified() {
         return verifiedAt != null;
     }
+
+    public void verify(LocalDateTime now) {
+        this.verifiedAt = now;
+    }
 }

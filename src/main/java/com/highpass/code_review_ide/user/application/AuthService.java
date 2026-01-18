@@ -14,11 +14,15 @@ import com.highpass.code_review_ide.user.domain.dao.RefreshTokenRepository;
 import com.highpass.code_review_ide.user.domain.dao.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 
 @Service
 @RequiredArgsConstructor
@@ -55,6 +59,12 @@ public class AuthService {
         if (!passwordEncoder.matches(req.password(), user.getPasswordHash())) {
             throw new IllegalArgumentException("이메일 또는 비밀번호가 올바르지 않습니다.");
         }
+
+        // Authentication 객체 생성 및 SecurityContext에 저장
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+                user.getId(), null, Collections.emptyList()
+        );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String access = jwtProvider.createAccessToken(user.getId(), user.getEmail());
 
