@@ -9,7 +9,5 @@ import com.highpass.code_review_ide.chat.domain.ChatRoom;
 
 public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
 
-    List<ChatRoom> findByIsGroupChat(String isGroupChat);
-
     Optional<ChatRoom> findByPost_Id(Long postId);
 }
