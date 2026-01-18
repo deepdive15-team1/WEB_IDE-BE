@@ -12,10 +12,12 @@ import com.highpass.code_review_ide.chat.domain.ChatRoom;
 import com.highpass.code_review_ide.chat.domain.dao.ChatRoomRepository;
 import com.highpass.code_review_ide.post.api.dto.request.CompletePostRequest;
 import com.highpass.code_review_ide.post.api.dto.request.CreatePostRequest;
+import com.highpass.code_review_ide.post.api.dto.request.UpdatePostCodeRequest;
 import com.highpass.code_review_ide.post.api.dto.response.CompletePostResponse;
 import com.highpass.code_review_ide.post.api.dto.response.CreatePostResponse;
 import com.highpass.code_review_ide.post.api.dto.response.PostDetailResponse;
 import com.highpass.code_review_ide.post.api.dto.response.PostListResponse;
+import com.highpass.code_review_ide.post.api.dto.response.UpdatePostCodeResponse;
 import com.highpass.code_review_ide.post.domain.PostStatus;
 import com.highpass.code_review_ide.post.domain.ReviewPost;
 import com.highpass.code_review_ide.post.domain.dao.ReviewPostRepository;
@@ -93,8 +95,26 @@ public class PostService {
 
     /**
      * 작성자만 DB에 최신 코드 스냅샷을 저장한다.
+     * - 실시간 편집 이벤트는 WebSocket으로만 공유
+     * - 저장/수정 시점에만 이 메서드 호출
      */
-    
+    @Transactional
+    public UpdatePostCodeResponse updatePostCode(Long requesterId, Long postId, UpdatePostCodeRequest req) {
+        ReviewPost post = reviewPostRepository.findWithAuthorById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
+
+        if (!post.getAuthor().getId().equals(requesterId)) {
+            throw new IllegalArgumentException("작성자만 게시글을 수정할 수 있습니다.");
+        }
+
+        if (post.getStatus() != PostStatus.OPEN) {
+            throw new IllegalArgumentException("OPEN 상태인 게시글만 수정할 수 있습니다.");
+        }
+
+        post.updateCodeSnapshot(req.codeText());
+
+        return new UpdatePostCodeResponse(post.getId(), post.getCodeText(), post.getCodeUpdatedAt());
+    }
 
     /**
      * 게시글 완료 처리(작성자만)

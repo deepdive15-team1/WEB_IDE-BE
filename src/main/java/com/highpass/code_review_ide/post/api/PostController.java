@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,10 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.highpass.code_review_ide.common.security.JwtProvider;
 import com.highpass.code_review_ide.post.api.dto.request.CompletePostRequest;
 import com.highpass.code_review_ide.post.api.dto.request.CreatePostRequest;
+import com.highpass.code_review_ide.post.api.dto.request.UpdatePostCodeRequest;
 import com.highpass.code_review_ide.post.api.dto.response.CompletePostResponse;
 import com.highpass.code_review_ide.post.api.dto.response.CreatePostResponse;
 import com.highpass.code_review_ide.post.api.dto.response.PostDetailResponse;
 import com.highpass.code_review_ide.post.api.dto.response.PostListResponse;
+import com.highpass.code_review_ide.post.api.dto.response.UpdatePostCodeResponse;
 import com.highpass.code_review_ide.post.application.PostService;
 
 import jakarta.validation.Valid;
@@ -88,6 +91,20 @@ public class PostController {
     ) {
         Long userId = requireUserId(authorization);
         return ResponseEntity.ok(postService.getPost(userId, postId));
+    }
+
+    /**
+     * 게시글 코드 수정(작성자만, OPEN 상태만 가능)
+     * - IDE에서 수정된 코드를 저장
+     */
+    @PutMapping("/{postId}/code")
+    public ResponseEntity<UpdatePostCodeResponse> updateCode(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+            @PathVariable("postId") Long postId,
+            @Valid @RequestBody UpdatePostCodeRequest req
+    ) {
+        Long userId = requireUserId(authorization);
+        return ResponseEntity.ok(postService.updatePostCode(userId, postId, req));
     }
 
     /**
