@@ -1,5 +1,7 @@
 package com.highpass.code_review_ide.common.security;
 
+import com.highpass.code_review_ide.user.domain.User;
+import com.highpass.code_review_ide.user.domain.dao.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,6 +25,7 @@ import java.util.Collections;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtProvider jwtProvider;
+    private final UserRepository userRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -34,8 +37,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             try {
                 Long userId = jwtProvider.getUserId(token);
                 
+                // DB에서 User 객체 조회
+                User user = userRepository.findById(userId)
+                        .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+                // Principal에 User 객체 저장
                 Authentication authentication = new UsernamePasswordAuthenticationToken(
-                        userId, 
+                        user, 
                         null,   
                         Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"))
                 );
@@ -44,6 +52,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 
             } catch (Exception e) {
                 log.warn("JWT Authentication failed: {}", e.getMessage());
+                SecurityContextHolder.clearContext();
             }
         }
 
