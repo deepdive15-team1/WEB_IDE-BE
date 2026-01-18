@@ -7,6 +7,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.highpass.code_review_ide.chat.application.ChatCommandService;
+import com.highpass.code_review_ide.chat.domain.ChatRoom;
+import com.highpass.code_review_ide.chat.domain.dao.ChatRoomRepository;
 import com.highpass.code_review_ide.post.api.dto.request.CompletePostRequest;
 import com.highpass.code_review_ide.post.api.dto.request.CreatePostRequest;
 import com.highpass.code_review_ide.post.api.dto.response.CompletePostResponse;
@@ -28,8 +31,8 @@ public class PostService {
 
     private final UserRepository userRepository;
     private final ReviewPostRepository reviewPostRepository;
-    //private final ChatRoomRepository chatRoomRepository;
-    //private final ChatParticipantRepository chatParticipantRepository;
+    private final ChatCommandService chatCommandService;
+    private final ChatRoomRepository chatRoomRepository;
 
     @Transactional
     public CreatePostResponse createPost(Long userId, CreatePostRequest req) {
@@ -46,12 +49,13 @@ public class PostService {
         ReviewPost saved = reviewPostRepository.save(post);
 
         // 게시글당 채팅방 1개 생성
-        //ChatRoom room = chatRoomRepository.save(new ChatRoom(saved));
+        ChatRoom room = ChatRoom.createForPost(saved);
+        ChatRoom savedRoom = chatRoomRepository.save(room);
 
         // 작성자 참여자 등록
-        //chatParticipantRepository.save(new ChatParticipant(room, author, ChatRole.AUTHOR));
+        chatCommandService.addParticipantToRoomChat(savedRoom.getId(), author);
 
-        return new CreatePostResponse(saved.getId(), null, post.getStatus(), post.getCreatedAt());
+        return new CreatePostResponse(saved.getId(), savedRoom.getId(), post.getStatus(), post.getCreatedAt());
     }
 
     public PostListResponse listOpenPosts(int page, int size) {
@@ -74,9 +78,15 @@ public class PostService {
             throw new IllegalArgumentException("종료된 게시글은 작성자만 열람할 수 있습니다.");
         }
 
-        Long roomId = null; // chatRoomRepository.findByPost_Id(postId)
-                // .map(ChatRoom::getId)
-                // .orElse(null);
+        // 게시글의 채팅방을 조회하고 현재 사용자를 참여자로 추가
+        Long roomId = chatRoomRepository.findByPost_Id(postId)
+                .map(room -> {
+                    User requester = userRepository.findById(requesterId)
+                            .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+                    chatCommandService.addParticipantToRoomChat(room.getId(), requester);
+                    return room.getId();
+                })
+                .orElse(null);
 
         return PostDetailResponse.from(post, roomId);
     }
