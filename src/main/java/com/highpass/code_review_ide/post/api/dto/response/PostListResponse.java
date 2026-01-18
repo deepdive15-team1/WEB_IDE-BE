@@ -19,6 +19,7 @@ public record PostListResponse(
                 .map(post -> new PostSummary(
                         post.getId(),
                         post.getTitle(),
+                        post.getDescription(),
                         post.getStatus().name(),
                         post.getLanguage(),
                         post.getAuthor().getId(),
