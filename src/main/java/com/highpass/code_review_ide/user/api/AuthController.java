@@ -9,7 +9,6 @@ import com.highpass.code_review_ide.user.api.dto.response.MeResponse;
 import com.highpass.code_review_ide.user.api.dto.response.SignupResponse;
 import com.highpass.code_review_ide.user.api.dto.response.TokenReissueResponse;
 import com.highpass.code_review_ide.user.domain.User;
-import com.highpass.code_review_ide.user.domain.dao.UserRepository;
 import com.highpass.code_review_ide.user.application.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +24,6 @@ import java.net.URI;
 public class AuthController {
 
     private final AuthService authService;
-    private final UserRepository userRepository;
 
     @PostMapping("/signup")
     public ResponseEntity<SignupResponse> signup(@Valid @RequestBody SignupRequest req) {
@@ -50,14 +48,7 @@ public class AuthController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<MeResponse> me(@AuthenticationPrincipal Long userId) {
-        if (userId == null) {
-            throw new IllegalArgumentException("인증 정보가 없습니다.");
-        }
-
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
-
+    public ResponseEntity<MeResponse> me(@AuthenticationPrincipal User user) {
         return ResponseEntity.ok(new MeResponse(user.getId(), user.getEmail(), user.getNickname()));
     }
 }
