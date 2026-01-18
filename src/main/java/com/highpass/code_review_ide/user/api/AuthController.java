@@ -10,12 +10,11 @@ import com.highpass.code_review_ide.user.api.dto.response.SignupResponse;
 import com.highpass.code_review_ide.user.api.dto.response.TokenReissueResponse;
 import com.highpass.code_review_ide.user.domain.User;
 import com.highpass.code_review_ide.user.domain.dao.UserRepository;
-import com.highpass.code_review_ide.common.security.JwtProvider;
 import com.highpass.code_review_ide.user.application.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -26,7 +25,6 @@ import java.net.URI;
 public class AuthController {
 
     private final AuthService authService;
-    private final JwtProvider jwtProvider;
     private final UserRepository userRepository;
 
     @PostMapping("/signup")
@@ -52,16 +50,7 @@ public class AuthController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<MeResponse> me(
-            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization
-    ) {
-        if (authorization == null || !authorization.startsWith("Bearer ")) {
-            throw new IllegalArgumentException("Authorization 헤더가 필요합니다. (Bearer 토큰)");
-        }
-
-        String token = authorization.substring("Bearer ".length()).trim();
-        Long userId = jwtProvider.getUserId(token);
-
+    public ResponseEntity<MeResponse> me(@AuthenticationPrincipal Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
