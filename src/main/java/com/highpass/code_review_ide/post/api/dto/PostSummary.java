@@ -10,5 +10,6 @@ public record PostSummary(
         String language,
         Long authorId,
         String authorNickname,
-        LocalDateTime createdAt
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt
 ) {}
