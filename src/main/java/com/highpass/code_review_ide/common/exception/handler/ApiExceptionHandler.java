@@ -1,4 +1,4 @@
-package com.highpass.code_review_ide.common;
+package com.highpass.code_review_ide.common.exception.handler;
 
 import com.highpass.code_review_ide.common.exception.BaseException;
 import com.highpass.code_review_ide.common.exception.dto.ErrorResponse;
