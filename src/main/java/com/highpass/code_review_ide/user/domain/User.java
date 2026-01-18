@@ -35,6 +35,9 @@ public class User {
     @Column(name = "password_hash", nullable = false, length = 255)
     private String passwordHash;
 
+    @Column(name = "github_access_token", length = 255)
+    private String githubAccessToken;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private UserStatus status = UserStatus.ACTIVE;
@@ -51,6 +54,10 @@ public class User {
         this.email = email;
         this.nickname = nickname;
         this.passwordHash = passwordHash;
+    }
+
+    public void updateGithubAccessToken(String token) {
+        this.githubAccessToken = token;
     }
 
     @Override
