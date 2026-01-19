@@ -30,6 +30,7 @@ public class StompController {
                 .message(chatMessageRequest.message())
                 .senderName(savedMessage.getUser().getNickname())
                 .sendTime(savedMessage.getCreatedTime())
+                .codeLineNumbers(chatMessageRequest.codeLineNumbers())
                 .build();
 
         messagingTemplate.convertAndSend("/subscribe/room/" + roomId, chatMessageResponse);

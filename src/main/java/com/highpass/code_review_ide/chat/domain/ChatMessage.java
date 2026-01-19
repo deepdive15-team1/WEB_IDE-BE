@@ -39,4 +39,5 @@ public class ChatMessage extends BaseTimeEntity {
     @Column(nullable = false, length = 500)
     private String content;
 
+    private Long codeLineNumber;
 }

@@ -8,6 +8,7 @@ public record ChatMessageResponse(
         Long roomId,
         String message,
         String senderName,
-        LocalDateTime sendTime
+        LocalDateTime sendTime,
+        Long codeLineNumbers
 ) {
 }
