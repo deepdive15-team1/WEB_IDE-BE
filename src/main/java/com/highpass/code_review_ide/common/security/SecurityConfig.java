@@ -48,6 +48,15 @@ public class SecurityConfig {
                 // 인증 실패 시 리다이렉트(302) 대신 401 에러 반환 설정 추가
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint((request, response, authException) -> {
+                            // CORS 헤더 수동으로 추가
+                            String origin = request.getHeader("Origin");
+                            if (origin != null) {
+                                response.setHeader("Access-Control-Allow-Origin", origin);
+                                response.setHeader("Access-Control-Allow-Credentials", "true");
+                                response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, OPTIONS");
+                                response.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type, X-Requested-With, Accept, Origin, Access-Control-Request-Method, Access-Control-Request-Headers");
+                            }
+
                             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                             response.setContentType("application/json");
                             response.getWriter().write("{\"error\": \"Unauthorized\", \"message\": \"" + authException.getMessage() + "\"}");
