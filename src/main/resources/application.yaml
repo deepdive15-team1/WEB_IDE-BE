@@ -43,7 +43,7 @@ spring:
             client-id: ${CLIENT_ID}
             client-secret: ${CLIENT_SECRET}
             scope: read:user,user:email,gist
-            redirect-uri: "https://api.ide.sjm00.link/login/oauth2/code/{registrationId}"
+            redirect-uri: '{baseUrl}/login/oauth2/code/{registrationId}'
 logging:
   level:
     org.hibernate.SQL: debug
