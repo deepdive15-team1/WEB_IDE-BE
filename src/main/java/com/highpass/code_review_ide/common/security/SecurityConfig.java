@@ -59,11 +59,11 @@ public class SecurityConfig {
 
         configuration.setAllowedOriginPatterns(List.of("*"));
 
-        configuration.setAllowedMethods(List.of("*"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
 
-        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-Requested-With", "Accept", "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers"));
 
-        configuration.setExposedHeaders(List.of("*"));
+        configuration.setExposedHeaders(List.of("Authorization"));
 
         configuration.setAllowCredentials(true);
 
