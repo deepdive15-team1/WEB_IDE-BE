@@ -55,7 +55,13 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:3000", "https://ide.sjm00.link", "https://api.ide.sjm00.link"));
+        configuration.setAllowedOrigins(List.of(
+                "http://localhost:3000",
+                "https://ide.sjm00.link",
+                "https://api.ide.sjm00.link",
+                "http://ec2-13-124-71-142.ap-northeast-2.compute.amazonaws.com",
+                "http://ec2-13-124-71-142.ap-northeast-2.compute.amazonaws.com:8080"
+        ));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
