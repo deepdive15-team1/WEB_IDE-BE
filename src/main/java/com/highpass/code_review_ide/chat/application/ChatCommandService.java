@@ -36,6 +36,7 @@ public class ChatCommandService {
                 .chatRoom(chatRoom)
                 .user(sender)
                 .content(chatMessageRequest.message())
+                .codeLineNumber(chatMessageRequest.codeLineNumbers())
                 .build();
         return chatMessageRepository.save(chatMessage);
     }
