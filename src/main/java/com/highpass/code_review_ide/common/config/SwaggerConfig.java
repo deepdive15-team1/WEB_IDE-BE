@@ -1,5 +1,6 @@
 package com.highpass.code_review_ide.common.config;
 
+import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -8,6 +9,8 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+
+import java.util.List;
 
 @Configuration
 public class SwaggerConfig {
@@ -22,10 +25,20 @@ public class SwaggerConfig {
                         "[WEB-IDE].\n"
                 );
 
+        // Server 설정
+        Server server = new Server();
+        server.setUrl("https://api.ide.sjm00.link");
+        server.setDescription("Production Server");
+
+        Server localServer = new Server();
+        localServer.setUrl("http://localhost:8080");
+        localServer.setDescription("Local Server");
+
         // Security 설정
 
         return new OpenAPI()
                 .info(info)
+                .servers(List.of(server, localServer))
                 .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
                 .components(new Components().addSecuritySchemes(
                         "bearerAuth",
