@@ -8,7 +8,10 @@ app:
 
 server:
   port: 8080
-  forward-headers-strategy: framework
+  forward-headers-strategy: native
+  tomcat:
+    remoteip:
+      internal-proxies: .*
   servlet:
     session:
       tracking-modes: cookie
@@ -43,7 +46,7 @@ spring:
             client-id: ${CLIENT_ID}
             client-secret: ${CLIENT_SECRET}
             scope: read:user,user:email,gist
-            redirect-uri: 'https://api.ide.sjm00.link/login/oauth2/code/github'
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
 logging:
   level:
     org.hibernate.SQL: debug
