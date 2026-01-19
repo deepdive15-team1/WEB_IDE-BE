@@ -66,9 +66,10 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         refreshTokenRepository.save(rt);
 
         // 3. 프론트엔드로 리다이렉트 (Access Token + Refresh Token)
-        String targetUrl = UriComponentsBuilder.fromUriString("https://www.naver.com/")
-                .queryParam("token", accessToken)
-                .queryParam("refreshToken", refreshPlain)
+        // 테스트를 위해 네이버로 리다이렉트
+        String targetUrl = UriComponentsBuilder.fromUriString("https://www.naver.com")
+//                .queryParam("token", accessToken)
+//                .queryParam("refreshToken", refreshPlain)
                 .build()
                 .encode(StandardCharsets.UTF_8)
                 .toUriString();
