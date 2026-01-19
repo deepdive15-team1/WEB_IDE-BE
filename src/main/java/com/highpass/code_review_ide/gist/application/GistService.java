@@ -8,6 +8,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
@@ -20,7 +21,13 @@ public class GistService {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    @Transactional(readOnly = true)
+    /**
+     * Gist 생성 (외부 API 호출이므로 트랜잭션 전파를 분리하거나 트랜잭션 없이 실행 권장)
+     * 여기서는 읽기 전용 트랜잭션으로 사용자 정보 조회 등을 보장하되,
+     * 외부 호출 실패가 상위 트랜잭션에 영향을 주지 않도록 주의해야 함.
+     * 하지만 호출부에서 try-catch로 감싸므로 여기서는 기본 설정 유지.
+     */
+    @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
     public String createGist(User user, GistRequest request) {
         String githubToken = user.getGithubAccessToken();
         if (githubToken == null) {
@@ -36,8 +43,8 @@ public class GistService {
         Map<String, String> fileContent = new HashMap<>();
         fileContent.put("content", request.content());
         
-        // 파일 이름이 없으면 기본값 설정
-        String fileName = (request.title() == null || request.title().isBlank()) ? "code_snippet.txt" : request.title();
+        // 파일 이름 설정 (언어에 따른 확장자 처리)
+        String fileName = makeFileName(request.title(), request.language());
         files.put(fileName, fileContent);
         
         body.put("files", files);
@@ -66,5 +73,33 @@ public class GistService {
         } catch (Exception e) {
             throw new RuntimeException("GitHub API 호출 중 오류 발생: " + e.getMessage());
         }
+    }
+
+    private String makeFileName(String title, String language) {
+        String safeTitle = (title == null || title.isBlank()) ? "code_snippet" : title.replaceAll("\\s+", "_");
+        String extension = getExtensionByLanguage(language);
+        // 이미 확장자가 있으면 그대로 사용
+        if (safeTitle.toLowerCase().endsWith(extension)) {
+            return safeTitle;
+        }
+        return safeTitle + extension;
+    }
+
+    private String getExtensionByLanguage(String language) {
+        if (language == null) return ".txt";
+        return switch (language.toLowerCase()) {
+            case "java" -> ".java";
+            case "python" -> ".py";
+            case "javascript", "js" -> ".js";
+            case "typescript", "ts" -> ".ts";
+            case "c" -> ".c";
+            case "cpp", "c++" -> ".cpp";
+            case "html" -> ".html";
+            case "css" -> ".css";
+            case "go" -> ".go";
+            case "kotlin" -> ".kt";
+            case "swift" -> ".swift";
+            default -> ".txt";
+        };
     }
 }

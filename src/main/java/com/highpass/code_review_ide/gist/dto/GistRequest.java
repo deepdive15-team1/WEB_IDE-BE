@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 public record GistRequest(
         @NotBlank String title,
         @NotBlank String content,
-        String description
+        String description,
+        String language
 ) {
 }
