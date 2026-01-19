@@ -27,7 +27,7 @@ public class SwaggerConfig {
 
         // Server 설정
         Server server = new Server();
-        server.setUrl("https://api.ide.sjm00.link");
+        server.setUrl("https://api-ide.sjm00.link");
         server.setDescription("Production Server");
 
         Server localServer = new Server();
