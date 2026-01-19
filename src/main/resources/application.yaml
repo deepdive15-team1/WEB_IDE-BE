@@ -5,6 +5,8 @@ app:
   refresh:
     days: 14
     pepper: "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+  frontend:
+    url: "https://ide.sjm00.link"
 
 server:
   port: 8080
