@@ -37,7 +37,8 @@ public class SecurityConfig {
                                 "/scalar/**",
                                 "/login/**",
                                 "/oauth2/**",
-                                "/health"
+                                "/health",
+                                "/ws-stomp"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
