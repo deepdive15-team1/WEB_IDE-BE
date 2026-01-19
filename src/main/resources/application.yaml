@@ -5,8 +5,6 @@ app:
   refresh:
     days: 14
     pepper: "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
-  frontend:
-    url: "https://ide.sjm00.link"
 
 server:
   port: 8080
@@ -48,7 +46,7 @@ spring:
             client-id: ${CLIENT_ID}
             client-secret: ${CLIENT_SECRET}
             scope: read:user,user:email,gist
-            redirect-uri: 'https://api.ide.sjm00.link/login/oauth2/code/github'
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
 logging:
   level:
     org.hibernate.SQL: debug
