@@ -66,7 +66,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         refreshTokenRepository.save(rt);
 
         // 3. 프론트엔드로 리다이렉트 (Access Token + Refresh Token)
-        String targetUrl = UriComponentsBuilder.fromUriString("https://ide.sjm00.link/oauth/callback")
+        String targetUrl = UriComponentsBuilder.fromUriString("http://localhost:3000/oauth/callback")
                 .queryParam("token", accessToken)
                 .queryParam("refreshToken", refreshPlain)
                 .build()
