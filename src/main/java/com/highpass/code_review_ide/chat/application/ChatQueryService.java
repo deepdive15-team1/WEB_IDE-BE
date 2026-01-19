@@ -50,6 +50,7 @@ public class ChatQueryService {
                         .message(chatMessage.getContent())
                         .senderName(chatMessage.getUser().getNickname())
                         .sendTime(chatMessage.getCreatedTime())
+                        .codeLineNumbers(chatMessage.getCodeLineNumber())
                         .build()
                 )
                 .toList();
