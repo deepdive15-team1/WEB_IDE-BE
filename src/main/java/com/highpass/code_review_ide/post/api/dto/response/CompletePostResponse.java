@@ -7,6 +7,7 @@ import com.highpass.code_review_ide.post.domain.PostStatus;
 public record CompletePostResponse(
         Long postId,
         PostStatus status,
-        LocalDateTime completedAt
+        LocalDateTime completedAt,
+        String gistUrl
 ) {
 }
